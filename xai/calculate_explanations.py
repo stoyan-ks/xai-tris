@@ -34,12 +34,16 @@ def apply_xai(config: Dict) -> XAIScenarios:
         for key,value in data_scenario.items():
             data[key] = value
 
+    print(f"Loaded data for {len(data)} scenarios.")
+
     # relatively hard-coded right now as 64x64 results were just on 1 experiment
     experiments_regex = '_0_*'
     if config["num_experiments"] > 1:
         experiments_regex = ''
-    torch_model_paths = glob(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*{experiments_regex}.pt')
 
+    print(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*{experiments_regex}.pt')
+    torch_model_paths = glob(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*.pt')
+    print(torch_model_paths)
     for scenario_name, dataset in data.items():
         results[scenario_name] = {
             'LLR': [],
@@ -50,15 +54,22 @@ def apply_xai(config: Dict) -> XAIScenarios:
         for model_name in ['LLR', 'MLP', 'CNN']:
             if model_name == 'LLR' and 'linear' not in sys.argv[1]:
                 continue
+            print("PATHS", torch_model_paths)
             for model_path in torch_model_paths:
                 if model_name in model_path:
                     model = load(model_path).to(DEVICE)
+                    print(f"About to compute attributions for {model_name} model from {model_path}.")
                     results[scenario_name][model_name].append(get_attributions(model=model, dataset=dataset, methods=config['methods'], test_size=config['test_size'], mini_batch=config['mini_batch']))
-            
-            del model
+                    print(f"Loaded {model_name} model from {model_path}.")
+                    del model
+
+        
+
             gc.collect()
 
         attributions = get_baselines(dataset, methods=config['filter_methods'], test_size=config['test_size'])
+        print(f"Computing attributions for {model_name} ...")
+
         for key, value in attributions.items():
             results[scenario_name][key] = value
 

@@ -29,7 +29,8 @@ def main():
     experiments_regex = '_0_*'
     if config["num_experiments"] > 1:
         experiments_regex = ''
-    torch_model_paths = glob(f'{config["training_path"]}/{sys.argv[1]}*_{sys.argv[2]}*{experiments_regex}.pt')
+        print(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*{experiments_regex}.pt')
+    torch_model_paths = glob(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*.pt')
 
     with open(f'{config["xai_path"]}/{sys.argv[1]}_{sys.argv[2]}_xai_records.pkl', 'rb') as file:
         xai_output = pkl.load(file)

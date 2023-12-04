@@ -3,7 +3,8 @@ import numpy as np
 from scipy.spatial.distance import cdist
 from scipy.ndimage import gaussian_filter
 
-from ot.lp import emd
+# from ot.lp import emd
+from scipy.stats import wasserstein_distance
 
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -62,14 +63,27 @@ def sum_to_1(mat):
 
 # Calculate EMD for full, continuous-valued, attribution
 # score = 1-(EMD/Dmax), where Dmax = max euclidean distance, aka sqrt(7^2 + 7^2)=9.8995 for the 8x8 data
+# def continuous_emd(gt_mask, attribution, n_dim=64):
+#     cost_matrix = cost_matrix_64by64
+#     if n_dim == 64:
+#         cost_matrix = cost_matrix_8by8
+
+#     _, log = emd(sum_to_1(gt_mask.reshape(n_dim)).astype(np.float64), sum_to_1(np.abs(attribution).reshape(n_dim)).astype(np.float64), cost_matrix, numItermax=200000, log=True)
+
+#     return 1 - (log['cost']/np.sqrt(n_dim + n_dim))
+
+# ...
+
 def continuous_emd(gt_mask, attribution, n_dim=64):
-    cost_matrix = cost_matrix_64by64
-    if n_dim == 64:
-        cost_matrix = cost_matrix_8by8
+    # Normalize the input distributions
+    normalized_gt_mask = sum_to_1(gt_mask.reshape(n_dim)).astype(np.float64)
+    normalized_attribution = sum_to_1(np.abs(attribution).reshape(n_dim)).astype(np.float64)
+    
+    # Compute the Wasserstein distance
+    distance = wasserstein_distance(normalized_gt_mask, normalized_attribution)
 
-    _, log = emd(sum_to_1(gt_mask.reshape(n_dim)).astype(np.float64), sum_to_1(np.abs(attribution).reshape(n_dim)).astype(np.float64), cost_matrix, numItermax=200000, log=True)
-
-    return 1 - (log['cost']/np.sqrt(n_dim + n_dim))
+    # Return the score, adapted for the new distance calculation
+    return 1 - (distance/np.sqrt(n_dim + n_dim))
 
 def precision(gt_mask, attribution, n_dim=64, n=8):
     # get highest n non-zero attribution values 

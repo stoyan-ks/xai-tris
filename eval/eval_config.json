@@ -1,10 +1,10 @@
 {
-    "data_path": "./artifacts/tetris/data/2023-06-14-11-32",
-    "training_path": "./artifacts/tetris/training/training_output",
-    "xai_path": "./artifacts/tetris/xai/xai_output",
-    "out_dir": "./artifacts/tetris/eval/eval_output",
+    "training_output": "artifacts/tetris/training/linear_uncorrelated",
+    "data_path": "artifacts/tetris/data/2023-09-05-19-00",
+    "xai_path": "./artifacts/tetris/xai/linear_uncorrelated",
+    "out_dir": "./artifacts/tetris/eval",
     "num_experiments": 1,
     "num_threads": 5,
-    "test_size": 2000,
+    "test_size": 1000,
     "mini_batch": 50
 }

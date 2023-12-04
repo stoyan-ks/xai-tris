@@ -22,10 +22,10 @@
         "sobel",
         "laplace"
     ],
-    "test_size": 2000,
+    "test_size": 1000,
     "mini_batch": 50,
     "num_experiments": 1,
-    "training_output": "artifacts/tetris/training/training_output",
-    "data_path": "artifacts/tetris/data/2023-06-14-11-32",
+    "training_output": "artifacts/tetris/training/SCENARIO_BACKGROUND",
+    "data_path": "artifacts/tetris/data/DATAFILEPATH",
     "output_dir": "artifacts/tetris/xai"
 }

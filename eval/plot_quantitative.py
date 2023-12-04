@@ -206,6 +206,7 @@ def main():
             boxplot_dict = {'results': {}}
             boxplot_dict_keras = {'results': {}}
             torch_paths = glob(f'{config["out_dir"]}/*_quantitative_results.pkl')
+            print('f{config["out_dir"]}/*_quantitative_results.pkl', torch_paths)
             for torch_path in torch_paths:
                 with open(torch_path, 'rb') as file:
                     torch_results = pkl.load(file)
@@ -216,15 +217,20 @@ def main():
                 
             # if also using quantitative results from iNNvestigate methods
             keras_paths = glob(f'{config["out_dir"]}/*_quantitative_results_keras.pkl')
+            print('f{config["out_dir"]}/*_quantitative_results_keras.pkl', keras_paths)
             for keras_path in keras_paths:
                 with open(keras_path, 'rb') as file:
                     keras_results = pkl.load(file)
                 
                 for key, val in keras_results['results'].items():
                     boxplot_dict_keras['results'][key] = val
-
+           
+            # print(boxplot_dict['results'].items())
+            # print(boxplot_dict_keras['results'].items())
             for scenario, scenario_results in boxplot_dict['results'].items():
+                # print(scenario_results['correct'].items())
                 for model_name, model_results in scenario_results['correct'].items():
+                    # print(boxplot_dict_keras)
                     results_len = 0
                     keras_len = 0
                     for j, result in enumerate(model_results[:5]):

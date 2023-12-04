@@ -5,7 +5,7 @@
   "patience": 400,
   "lr": 0.0005,
   "output_dir": "artifacts/tetris/training",
-  "data_path": "artifacts/tetris/data/2023-06-14-11-32",
+  "data_path": "artifacts/tetris/data/2023-09-05-19-00",
   "checkpoint_path":  "",
   "data_scenario": "tetris_data"
 }

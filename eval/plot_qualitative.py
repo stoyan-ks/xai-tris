@@ -305,7 +305,7 @@ def main():
             
             correct_inds.append(quantitative_results['intersections'])
 
-            torch_model_paths = glob(f'{config["training_path"]}/{scenario}*_{background}*_0_*.pt')
+            torch_model_paths = glob(f'{config["training_output"]}/{scenario}*_{background}*_0_*.pt')
 
             for model_name in ['LLR', 'MLP', 'CNN']:
                 if model_name == 'LLR' and 'linear' not in scenario:
